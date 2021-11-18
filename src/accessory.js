@@ -2,6 +2,7 @@ const https = require('https');
 const { URLSearchParams } = require('url');
 
 const OPENWEATHER_API_BASE_URL = 'https://api.openweathermap.org/data/2.5';
+const MIN_REFRESH_INTERVAL = 10000;
 
 class WeatherConditions {
     constructor(log, config, api) {
@@ -13,7 +14,7 @@ class WeatherConditions {
         this.name = config.name;
         this.apiKey = config.apiKey;
         this.locationQuery = config.locationQuery;
-        this.updateInterval = config.updateInterval;
+        this.updateInterval = Math.max(config.updateInterval, MIN_REFRESH_INTERVAL);
 
         // Temperature Service + Characteristic:
         this.temperatureService = new this.api.hap.Service.TemperatureSensor(this.name);
