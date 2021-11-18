@@ -21,14 +21,14 @@ class WeatherConditions {
 
         this.temperatureCharacteristic
             .on(this.api.hap.CharacteristicEventTypes.GET, (callback) => {
-                const val = this.formatValue(this.temperatureCharacteristic.value);
+                const val = this.formatTemperature(this.temperatureCharacteristic.value);
 
                 this.log(`Yielding current temperature: ${val}`);
                 callback(undefined, this.temperatureCharacteristic.value);
             })
             .on(this.api.hap.CharacteristicEventTypes.CHANGE, (change) => {
-                const oldVal = this.formatValue(change.oldValue);
-                const newVal = this.formatValue(change.newValue);
+                const oldVal = this.formatTemperature(change.oldValue);
+                const newVal = this.formatTemperature(change.newValue);
 
                 this.log(`Temperature updated from ${oldVal} to ${newVal} in response to a “${change.reason}” event.`);
             });
@@ -43,7 +43,7 @@ class WeatherConditions {
                 callback(undefined, this.humidityCharacteristic.value);
             })
             .on(this.api.hap.CharacteristicEventTypes.CHANGE, (change) => {
-                this.log(`Temperature updated from ${change.oldValue}% to ${change.newValue}% in response to a “${change.reason}” event.`);
+                this.log(`Humidity updated from ${change.oldValue}% to ${change.newValue}% in response to a “${change.reason}” event.`);
             });
 
 
@@ -133,7 +133,7 @@ class WeatherConditions {
     /**
      * Formats a temperature value.
      */
-    formatValue(temp) {
+    formatTemperature(temp) {
         return `${temp}°C`;
     }
 }
