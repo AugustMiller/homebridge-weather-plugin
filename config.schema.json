@@ -18,13 +18,13 @@
             },
             "locationQuery": {
                 "title": "Location Query",
-                "decription": "A description of the location you want to monitor weather conditions for, compatible with the OpenWeather API’s `q` option. See the documentation for more information!",
+                "description": "A description of the location you want to monitor weather conditions for, compatible with the OpenWeather API’s `q` option. See the documentation for more information!",
                 "type": "string",
                 "required": true
             },
             "updateInterval": {
                 "title": "Update Interval",
-                "decription": "Number of milliseconds between updates. Minimum value is one minute, to avoid exhausting API limits!",
+                "description": "Number of milliseconds between updates. Minimum value is one minute, to avoid exhausting API limits!",
                 "type": "number",
                 "required": true
             }
