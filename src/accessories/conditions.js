@@ -1,9 +1,11 @@
-const https = require('https');
-const { URLSearchParams } = require('url');
+const api = require('../lib/api');
+const utils = require ('../lib/utils');
 
-const OPENWEATHER_API_BASE_URL = 'https://api.openweathermap.org/data/2.5';
 const MIN_REFRESH_INTERVAL = 10000;
 
+/**
+ * Accessory providing Services for current temperature, humidity, and cloud-cover.
+ */
 class WeatherConditions {
     constructor(log, config, api) {
         // System references:
@@ -16,20 +18,22 @@ class WeatherConditions {
         this.locationQuery = config.locationQuery;
         this.updateInterval = Math.max(config.updateInterval, MIN_REFRESH_INTERVAL);
 
-        // Temperature Service + Characteristic:
+        // Temperature Service + Characteristics:
         this.temperatureService = new this.api.hap.Service.TemperatureSensor(this.name);
         this.temperatureCharacteristic = this.temperatureService.getCharacteristic(this.api.hap.Characteristic.CurrentTemperature);
 
+        this.temperatureService.getCharacteristic(this.api.Characteristic.Name).setValue('Outside Temperature');
+
         this.temperatureCharacteristic
             .on(this.api.hap.CharacteristicEventTypes.GET, (callback) => {
-                const val = this.formatTemperature(this.temperatureCharacteristic.value);
+                const val = utils.formatTemperature(this.temperatureCharacteristic.value);
 
                 this.log(`Yielding current temperature: ${val}`);
                 callback(undefined, this.temperatureCharacteristic.value);
             })
             .on(this.api.hap.CharacteristicEventTypes.CHANGE, (change) => {
-                const oldVal = this.formatTemperature(change.oldValue);
-                const newVal = this.formatTemperature(change.newValue);
+                const oldVal = utils.formatTemperature(change.oldValue);
+                const newVal = utils.formatTemperature(change.newValue);
 
                 this.log(`Temperature updated from ${oldVal} to ${newVal} in response to a “${change.reason}” event.`);
             });
@@ -37,6 +41,8 @@ class WeatherConditions {
         // Humidity Service + Characteristic:
         this.humidityService = new this.api.hap.Service.HumiditySensor(this.name);
         this.humidityCharacteristic = this.humidityService.getCharacteristic(this.api.hap.Characteristic.CurrentRelativeHumidity);
+
+        this.humidityService.getCharacteristic(this.api.Characteristic.Name).setValue('Outside Humidity');
 
         this.humidityCharacteristic
             .on(this.api.hap.CharacteristicEventTypes.GET, (callback) => {
@@ -47,6 +53,17 @@ class WeatherConditions {
                 this.log(`Humidity updated from ${change.oldValue}% to ${change.newValue}% in response to a “${change.reason}” event.`);
             });
 
+        // Cloud Cover Service + Characteristic:
+        this.cloudinessService = new this.api.hap.Service.LightSensor(this.name);
+        this.cloudinessCharacteristic = this.cloudinessService.getCharacteristic(this.api.hap.Characteristic.CurrentAmbientLightLevel);
+
+        this.cloudinessService.getCharacteristic(this.api.Characteristic.Name).setValue('Cloud Cover');
+
+        this.cloudinessCharacteristic.setProps({
+            minValue: 0,
+            maxValue: 100,
+            unit: this.api.hap.Characteristic.Units.PERCENTAGE,
+        });
 
         // Information Service + Make/Model Characteristics:
         this.informationService = new this.api.hap.Service.AccessoryInformation();
@@ -80,6 +97,7 @@ class WeatherConditions {
         return [
             this.temperatureService,
             this.humidityService,
+            this.cloudCoverService,
             this.informationService,
         ];
     }
@@ -90,52 +108,21 @@ class WeatherConditions {
     updateConditions () {
         this.log(`Performing scheduled weather conditions update!`);
 
-        const conditionsQuery = new URLSearchParams({
+        const query = {
             q: this.locationQuery,
             appid: this.apiKey,
             units: 'metric',
-        });
+        };
 
-        try {
-            this.makeGetRequest('weather', conditionsQuery, (status, conditions) => {
+        api.get('weather', query)
+            .then((conditions) => {
                 this.temperatureCharacteristic.updateValue(conditions.main.temp);
                 this.humidityCharacteristic.updateValue(conditions.main.humidity);
+                this.cloudinessCharacteristic.updateValue(conditions.clouds.all);
+            })
+            .catch((err) => {
+                this.log.error(err.message);
             });
-        } catch (e) {
-            this.log.error(e.message);
-        }
-    }
-
-    /**
-     * Makes a GET request to the OpenWeather API.
-     */
-    makeGetRequest (path, query, onResult) {
-        const req = https.get(`${OPENWEATHER_API_BASE_URL}/${path}?${query}`, (res) => {
-            let output = '';
-
-            res.setEncoding('utf8');
-
-            res.on('data', (chunk) => {
-                output += chunk;
-            });
-
-            res.on('end', () => {
-                onResult(res.statusCode, JSON.parse(output));
-            });
-        });
-
-        req.on('error', (err) => {
-            throw err;
-        });
-
-        req.end();
-    }
-
-    /**
-     * Formats a temperature value.
-     */
-    formatTemperature(temp) {
-        return `${temp}°C`;
     }
 }
 
