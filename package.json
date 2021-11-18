@@ -1,16 +1,16 @@
 {
     "private": true,
-    "displayName": "Plugin Name",
-    "name": "homebridge-weather-conditions",
-    "version": "1.0.0",
+    "displayName": "Weather Conditions",
+    "name": "homebridge-weather-plugin",
+    "version": "0.0.1",
     "description": "",
     "license": "Apache-2.0",
     "repository": {
         "type": "git",
-        "url": "git://github.com/augustmiller/homebridge-weather-conditions.git"
+        "url": "git://github.com/augustmiller/homebridge-weather-plugin.git"
     },
     "bugs": {
-        "url": "https://github.com/augustmiller/homebridge-weather-conditions/issues"
+        "url": "https://github.com/augustmiller/homebridge-weather-plugin/issues"
     },
     "engines": {
         "node": ">=14.18.1",
