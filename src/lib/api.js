@@ -24,7 +24,7 @@ function get (path, query) {
             });
 
             res.on('end', () => {
-                resolve(res.statusCode, JSON.parse(output));
+                resolve(JSON.parse(output));
             });
         });
 

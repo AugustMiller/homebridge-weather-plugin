@@ -45,5 +45,7 @@ Refresh frequency, in miliseconds. Don't be too aggressive with this!
 ## Planned Features
 - [ ] Switches or other binary sensors for common weather conditions. Not sure how to represent these without being confusing, in-app (i.e. using the faucet service/characteristic for rain)!
 - [ ] Properly group characteristics into single Accessories to reduce clutter in the Home app
+- [ ] Support multiple accessories by registering the plugin as a Provider
+- [ ] Provide forecast data
 
 :deciduous_tree:

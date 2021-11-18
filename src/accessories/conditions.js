@@ -22,7 +22,7 @@ class WeatherConditions {
         this.temperatureService = new this.api.hap.Service.TemperatureSensor(this.name);
         this.temperatureCharacteristic = this.temperatureService.getCharacteristic(this.api.hap.Characteristic.CurrentTemperature);
 
-        this.temperatureService.getCharacteristic(this.api.Characteristic.Name).setValue('Outside Temperature');
+        this.temperatureService.getCharacteristic(this.api.hap.Characteristic.Name).setValue('Outside Temperature');
 
         this.temperatureCharacteristic
             .on(this.api.hap.CharacteristicEventTypes.GET, (callback) => {
@@ -42,7 +42,7 @@ class WeatherConditions {
         this.humidityService = new this.api.hap.Service.HumiditySensor(this.name);
         this.humidityCharacteristic = this.humidityService.getCharacteristic(this.api.hap.Characteristic.CurrentRelativeHumidity);
 
-        this.humidityService.getCharacteristic(this.api.Characteristic.Name).setValue('Outside Humidity');
+        this.humidityService.getCharacteristic(this.api.hap.Characteristic.Name).setValue('Outside Humidity');
 
         this.humidityCharacteristic
             .on(this.api.hap.CharacteristicEventTypes.GET, (callback) => {
@@ -57,7 +57,7 @@ class WeatherConditions {
         this.cloudinessService = new this.api.hap.Service.LightSensor(this.name);
         this.cloudinessCharacteristic = this.cloudinessService.getCharacteristic(this.api.hap.Characteristic.CurrentAmbientLightLevel);
 
-        this.cloudinessService.getCharacteristic(this.api.Characteristic.Name).setValue('Cloud Cover');
+        this.cloudinessService.getCharacteristic(this.api.hap.Characteristic.Name).setValue('Cloud Cover');
 
         this.cloudinessCharacteristic.setProps({
             minValue: 0,
@@ -97,7 +97,7 @@ class WeatherConditions {
         return [
             this.temperatureService,
             this.humidityService,
-            this.cloudCoverService,
+            this.cloudinessService,
             this.informationService,
         ];
     }
