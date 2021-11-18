@@ -1,0 +1,33 @@
+{
+    "pluginAlias": "WeatherConditions",
+    "pluginType": "accessory",
+    "singular": false,
+    "schema": {
+        "type": "object",
+        "properties": {
+            "name": {
+                "title": "Location Name",
+                "type": "string",
+                "required": true
+            },
+            "apiKey": {
+                "title": "API Key",
+                "description": "Your personal OpenWeather key. The free tier should be adequate for most uses.",
+                "type": "string",
+                "required": true
+            },
+            "locationQuery": {
+                "title": "Location Query",
+                "decription": "A description of the location you want to monitor weather conditions for, compatible with the OpenWeather API’s `q` option. See the documentation for more information!",
+                "type": "string",
+                "required": true
+            },
+            "updateInterval": {
+                "title": "Update Interval",
+                "decription": "Number of milliseconds between updates. Minimum value is one minute, to avoid exhausting API limits!",
+                "type": "number",
+                "required": true
+            }
+        }
+    }
+}
