@@ -7,7 +7,7 @@ const MIN_REFRESH_INTERVAL = 10000;
  * Accessory providing Services for current temperature, humidity, and cloud-cover.
  */
 class WeatherConditions {
-    constructor(log, config, api) {
+    constructor (log, config, api) {
         // System references:
         this.api = api;
         this.log = log;
