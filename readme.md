@@ -1,6 +1,6 @@
 # Weather Conditions Homebridge Accessory
 
-This plugin exposes local weather data to your Homebridge instance in the form of Temperature and Humidity sensors.
+This plugin exposes local weather data to your Homebridge instance in the form of Temperature, Humidity, and Luminosity sensors.
 
 > Currently, Homekit doesn't support either of these as triggers for automation, so they're largely useless!
 
