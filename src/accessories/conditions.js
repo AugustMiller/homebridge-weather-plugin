@@ -150,7 +150,7 @@ class WeatherConditions {
 
         this.log(`Forecast is not yet implemented! This is only a feature for paid plans, it turns out. Setting forecast to bogus value: [${bogusVal ? 'yes' : 'no'}].`);
 
-        this.forecastedRainCharacteristic.updateValue(bogusVal ? );
+        this.forecastedRainCharacteristic.updateValue(bogusVal);
 
         return;
 
